@@ -1,0 +1,18 @@
+#api:
+#    resource: "@ApiBundle/Controller/"
+#    type:     annotation
+#    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+usuario:
+    type:     rest
+    resource: ApiBundle\Controller\UsuariosController
+    defaults: {_format: json}
+    
+mascota:
+    type:     rest
+    resource: ApiBundle\Controller\MascotasController
+    defaults: {_format: json}
