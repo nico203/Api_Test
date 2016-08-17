@@ -16,7 +16,7 @@ class UsuariosController extends FOSRestController
     public function getUsuariosAction() {
         $usuarios = $this->getDoctrine()->getRepository('ApiBundle:Usuario')->findAll();
         
-        return array('usuarios' => $usuarios);
+        return array('data' => $usuarios);
     }
     
     /**
@@ -28,7 +28,7 @@ class UsuariosController extends FOSRestController
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
         }
         
-        return array('usuario' => $usuario);
+        return array('data' => $usuario);
     }
 
     public function postUsuariosAction(Request $request) {
@@ -43,13 +43,16 @@ class UsuariosController extends FOSRestController
                 $em->persist($usuario);
                 $em->flush();
 
-                $view->setStatusCode(201); //Created
-                $response = $this->handleView($view);
-                $response->headers->set('Location', 
-                        $this->generateUrl('get_usuario', array(
-                            'id' => $usuario->getId()
-                        ), true));
-                return $response;
+                $view->setStatusCode(201)
+                        ->setData(array(
+                            'data' => $usuario)); //Created
+//                $response = $this->handleView($view);
+//                $response->headers->set('Location', 
+//                        $this->generateUrl('get_usuario', array(
+//                            'id' => $usuario->getId()
+//                        ), true));
+//                return $response;
+                return $this->handleView($view);
 
             }
 
@@ -59,5 +62,13 @@ class UsuariosController extends FOSRestController
         }  catch (\Exception $ex) {
             throw new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException($ex->getMessage());
         }       
+    }
+    
+    public function sortUsuariosAction() {
+        
+    }
+    
+    public function getSortedUsuariosAction($param) {
+        
     }
 }

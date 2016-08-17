@@ -17,7 +17,7 @@ class MascotasController extends FOSRestController
         $mascotas = $this->getDoctrine()->getRepository('ApiBundle:Mascota')->findAll();
         
         return array(
-            'mascotas' => $mascotas
+            'data' => $mascotas
         );
     }
     
@@ -31,7 +31,7 @@ class MascotasController extends FOSRestController
         }
         
         return array(
-            'mascota' => $mascota
+            'data' => $mascota
         );
     }
     
@@ -50,7 +50,7 @@ class MascotasController extends FOSRestController
                 $view->setStatusCode(201); //Created
                 $response = $this->handleView($view);
                 $response->headers->set('Location', 
-                        $this->generateUrl('get_usuario', array(
+                        $this->generateUrl('get_mascota', array(
                             'id' => $mascota->getId()
                         ), true));
                 return $response;
@@ -63,5 +63,20 @@ class MascotasController extends FOSRestController
         } catch (\Exception $ex) {
             throw new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException($ex->getMessage());
         }
+    }
+    
+    /**
+     * @Rest\View
+     */
+    public function sortMascotasAction(Request $request) {
+        $latitud = $request->query->get('latitud');
+        $longitud = $request->query->get('longitud');
+        
+        $mascotas = $this->getDoctrine()->getRepository('ApiBundle:Mascota')
+                ->ordenarMascotas($latitud, $longitud);
+        
+        return array(
+            'data' => $mascotas
+        );
     }
 }
